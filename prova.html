@@ -1,0 +1,36 @@
+<html>
+  <body onload="renderHello()">
+    <div id="target">Loading...</div>
+    <script id="template" type="x-tmpl-mustache">
+      Hello {{ name }}!
+    </script>
+
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+</body>
+</html>
+
+<script>
+    function ajaxReq(){
+        return $.ajax({
+            url: "https://pokeapi.co/api/v2/pokemon/1",
+            dataType: "json"
+        })
+    }
+
+    function renderHello() {
+        // console.log($(document))
+        let moves = {element: []};
+        ajaxReq().done(function(response){
+            console.log(response.moves)
+            moves["element"] = response.moves;
+        });
+        fetch('template.mustache')
+        .then((response) => response.text())
+        .then((template) => {
+            var rendered = Mustache.render(template, moves);
+            document.getElementById('target').innerHTML = rendered;    
+        });
+    }
+</script>
